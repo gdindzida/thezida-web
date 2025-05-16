@@ -1,0 +1,235 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* HTML and Body */
+html,
+body {
+  height: 100%;
+  background-color: #121212; /* dark background */
+  color: #e0e0e0; /* light text */
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Center everything using flexbox */
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Home container styles */
+.home-container {
+  padding: 40px 20px;
+  width: 100%;
+  max-width: 900px;
+}
+
+/* Header */
+.home-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.home-header p {
+  font-size: 1.2rem;
+  color: #bbbbbb;
+}
+
+.profile-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 75%;
+  object-fit: cover;
+}
+
+/* Links */
+.home-links {
+  margin-top: 30px;
+}
+
+.home-links h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+.home-links ul {
+  list-style: none;
+}
+
+.home-links li {
+  margin: 10px 0;
+}
+
+.home-links a {
+  color: #1e90ff;
+  text-decoration: none;
+  font-size: 1.1rem;
+}
+
+.home-links a:hover {
+  text-decoration: underline;
+}
+
+/* Canvas container */
+.canvas-container {
+  margin-top: 50px;
+  padding: 20px;
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center all canvas children */
+}
+
+/* Canvas header */
+.canvas-header {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+/* Canvas */
+.canvas-window {
+  border: 2px solid #333;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+}
+
+/* Output text (FPS, vertices) */
+.canvas-output {
+  margin-top: 15px;
+  font-size: 1.2rem;
+  color: #cccccc;
+}
+
+.button-container {
+  display: flex; /* This will make the buttons sit side by side */
+  gap: 10px; /* Space between buttons */
+}
+
+/* Buttons */
+.canvas-button {
+  margin: 10px 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #1e90ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.canvas-button:hover {
+  background-color: #0b6fc2;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  gap: 15px; /* Space between the elements */
+  width: 300px; /* Set a fixed width (optional) */
+  padding: 20px; /* Add padding around the container */
+  background-color: #1e1e1e; /* Dark background for the container */
+  border-radius: 8px; /* Optional: add rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Optional: shadow for a subtle 3D effect */
+  margin: 20px auto; /* Center the form on the page */
+}
+
+/* Style each input and select for consistent height and appearance */
+.input-container input,
+.input-container select {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #333; /* Dark border */
+  border-radius: 4px;
+  background-color: #2a2a2a; /* Dark background for inputs */
+  color: #f5f5f5; /* Light text inside the input fields */
+  width: 100%; /* Make inputs fill the container width */
+}
+
+.input-container input:focus,
+.input-container select:focus {
+  border-color: #007bff; /* Blue border on focus */
+  outline: none; /* Remove the default focus outline */
+}
+
+/* Style labels for better readability */
+.input-container label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #e0e0e0; /* Light color for labels */
+}
+
+/* Style checkbox inputs (toggle) */
+.input-container input[type="checkbox"] {
+  transform: scale(1.2); /* Make checkboxes larger */
+}
+
+.instructions {
+  background-color: #1e1e1e; /* Dark background for the instructions container */
+  padding: 20px; /* Padding inside the container */
+  margin: 20px; /* Small margin for some space around the container */
+  width: 100%; /* Make it take the full width of the parent container */
+  max-width: 900px; /* Limit the width to a maximum size */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow for a soft 3D effect */
+  text-align: left; /* Left align the text inside the container */
+}
+
+/* Style the heading */
+.instructions h3 {
+  color: #ffffff; /* White color for the heading */
+  font-size: 24px; /* Set a larger font size for headings */
+  margin-bottom: 15px; /* Space below the heading */
+}
+
+/* Style the paragraphs */
+.instructions p {
+  color: #e0e0e0; /* Light gray color for paragraphs */
+  font-size: 16px; /* Set font size for readability */
+  line-height: 1.6; /* Add line height for better readability */
+  margin-bottom: 10px; /* Add spacing between paragraphs */
+}
+
+/* Style bold text */
+.instructions b {
+  font-weight: bold;
+  color: #007bff; /* Set color for bold text to blue to highlight key terms */
+}
+
+/* Optional: Style the links inside the instructions */
+.instructions a {
+  color: #007bff; /* Set link color to blue */
+  text-decoration: none; /* Remove underline from links */
+}
+
+.instructions a:hover {
+  text-decoration: underline; /* Underline on hover for better interaction */
+}
+
+.instructions .input-number-container {
+  display: flex;
+  align-items: center;
+}
+
+.input-number-container button {
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.input-number-container input {
+  width: 60px;
+  text-align: center;
+  padding: 5px;
+  font-size: 16px;
+  margin: 0 10px;
+}

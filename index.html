@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="./assets/icons/spear.jpg">
+    <title>Mr. Dzida</title>
+    <link rel="stylesheet" href="./src/css/style.css">
+</head>
+
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div class="home-container">
+        <header class="home-header">
+            <img src="./assets/images/profile.png" alt="Profile Picture" class="profile-image" />
+            <p>Hi, I'm Martin Džida, a software developer working in the automotive industry.</p>
+        </header>
+
+        <section class="home-links">
+            <h2>Find me online:</h2>
+            <ul>
+                <li>
+                    <a href="https://www.linkedin.com/in/martin-džida-689003111" target="_blank"
+                        rel="noopener noreferrer">
+                        LinkedIn
+                    </a>
+                </li>
+                <li>
+                    <a href="https://github.com/gdindzida" target="_blank" rel="noopener noreferrer">
+                        GitHub
+                    </a>
+                </li>
+                <li>
+                    <a href="mailto:gdindzida@gmail.com">Email: gdindzida@gmail.com</a>
+                </li>
+            </ul>
+        </section>
+    </div>
+    <div class="canvas-container">
+        <h1 class="canvas-header">Geometry algorithm sandbox</h1>
+
+        <canvas class="canvas-window" id="canvas" width="600" height="600"
+            oncontextmenu="event.preventDefault()"></canvas>
+
+        <div class="canvas-output" id="output">
+            FPS: N/A
+        </div>
+
+        <div class="canvas-output" id="vertices">
+            Number of vertices: 0
+        </div>
+
+        <div class="button-container">
+            <button class="canvas-button" id="resetButton">Reset</button>
+
+            <button class="canvas-button" id="undoButton">Undo</button>
+
+            <button class="canvas-button" id="configButton">Config</button>
+
+            <button class="canvas-button" id="prButton">Pause</button>
+        </div>
+
+        <div class="input-container">
+            <button class="canvas-button" id="setConfigButton">Set configuration</button>
+
+            <label for="algorithm-name">Choose an algorithm:</label>
+            <select id="algorithm-name" name="algorithm-name">
+                <option value="NoAlgorithm">No Algorithm</option>
+                <option value="ConvexHullNaive">Convex Hull Naive</option>
+                <option value="ConvexHullGraham">Convex Hull Graham</option>
+                <option value="ConvexHullJarvis">Convex Hull Jarvis</option>
+                <option value="ConvexHullChan">Convex Hull Chan</option>
+                <option value="SpatialIndexingGrid">Spatial Indexing Grid</option>
+                <option value="SpatialIndexingQuadTree">Spatial Indexing Quad Tree</option>
+            </select>
+
+            <label for="collisions">Collisions</label>
+            <input type="checkbox" id="collisions" name="collisions">
+
+            <label for="gravity-global">Global gravity</label>
+            <input type="checkbox" id="gravity-global" name="gravity-global">
+
+            <label for="gravity-particle">Gravity per particle</label>
+            <input type="checkbox" id="gravity-particle" name="gravity-particle">
+
+            <label for="minSize">Min size in pixels:</label>
+            <div class="input-number-container">
+                <button class="decrease" id="decrease-minSize">&#x2193;</button>
+                <input type="number" id="minSize" name="minSize" step="1" value="10">
+                <button class="increase" id="increase-minSize">&#x2191;</button>
+            </div>
+
+            <label for="maxSize">Max size in pixels:</label>
+            <div class="input-number-container">
+                <button class="decrease" id="decrease-maxSize">&#x2193;</button>
+                <input type="number" id="maxSize" name="maxSize" step="1" value="100">
+                <button class="increase" id="increase-maxSize">&#x2191;</button>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>Instructions</h3>
+            <p>Click anywhere to spawn a point. Size of spawned point will be random between currently set minimal and
+                maximal size. Point will also be given random velocity vector. Button <b>Reset</b> removes all points
+                and button <b>Undo</b> removes last added point.</p>
+            <p>Current configuration can be seen by clicking on button <b>Config</b>. There you can set config you want
+                and then press button <b>Run</b> to resume simulation. Same thing could also be achieved with keyboard
+                key <b>I</b> for opening and closing configuration and keyboard key <b>P</b> for pausing and resuming
+                simulation. If you are on <u><i>Smartphone</i></u> it is recommended to use input fileds below
+                simulation
+                window and button
+                <b>Set configuration</b>. But all combinations of given are possible.
+            </p>
+            <p>Buttons <b>Run</b> and <b>Pause</b> are shown depending of current state of simulation. You can use them
+                for pausing and resuming simulation. When you pause simulation but configuration window is not open you
+                can still play with adding and removing points.</p>
+            <p>There are few possible configuration parameters you can set and are listed bellow.</p>
+            <p>Algorthm name chooses one of the available algorithms for rendering.</p>
+            <p><u><i>NoAlgorithm</i></u> renders only points.</p>
+            <p><u><i>ConvexHullNaive</i></u> renders convex hull for all points using naive algorithm.</p>
+            <p><u><i>ConvexHullGraham</i></u> renders convex hull for all points using Graham scan algorithm. It
+                collors upper
+                and lower hull differently.</p>
+            <p><u><i>ConvexHullJarvis</i></u> renders convex hull for all points using Jarvis algorithm.
+                Currently rendering
+                doesn't differ from naive algorithm but if you have suggestions on how to color it send me an email :).
+            </p>
+            <p><u><i>ConvexHullChan</i></u> renders convex hull for all points using Chans algorithm. It renders
+                jarvis outter
+                hull red and graham scan inner upper and lower hulls orange and yellow respectively.</p>
+            <p><u><i>SpatialIndexingGrid</i></u> renders spatial indexing method using uniform grid. It colors
+                red those boxes
+                which currently contain a point.</p>
+            <p><u><i>SpatialIndexingQuadTree</i></u> renders spatial indexing method using quad tree. It renders
+                quad tree
+                nodes with maximum depth of 3.</p>
+            <p>This simulation has also some basic physics implemented. Explanation for each follows.</p>
+            <p><u><i>Collisions</i></u> toggles collisions between particles. It currently uses mix of position
+                based approach
+                and approach decribled in <a
+                    href="chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://www.phys.ufl.edu/~kevin/teaching/2060/08spring/two-body_collisions.pdf">here</a>.
+            </p>
+            <p><u><i>Global gravity</i></u> toggles global gravity directed down for all particles.</p>
+            <p><u><i>Gravity per particle</i></u> toggles gravity of each particle. When it is on, each particle will
+                exert
+                pulling force on other particles based on its size. Bigger the particle bigger the force.</p>
+            <p><u><i>Min size in pixels</i></u> defines currently minimum size of point radius in pixels. Note: when
+                resizing
+                windows these will automatically change.</p>
+            <p><u><i>Max size in pixels</i></u> defines currently maximal size of point radius in pixels. Note: when
+                resizing
+                windows these will automatically change.</p>
+
+        </div>
+
+        <script type="text/javascript" src="src/js/index.js"></script>
+
+    </div>
+</body>
+
+</html>

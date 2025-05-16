@@ -1,0 +1,47 @@
+#version 300 es
+
+precision mediump float;
+
+in vec3 vertexColor;
+out vec4 FragColor;
+
+void main() {
+    vec2 coord = gl_PointCoord - vec2(0.5);
+    if (length(coord) > 0.5) discard;
+
+    FragColor = vec4(vertexColor, 1.0); // some color
+}
+#version 300 es
+
+layout(location = 0) in vec2 aPos;
+layout(location = 1) in vec3 aColor;
+
+out vec3 vertexColor;
+
+void main() { 
+    gl_Position = vec4(aPos, 0.0, 1.0);
+    vertexColor = aColor;
+}
+#version 300 es
+
+layout(location = 0) in vec2 aPos;
+layout(location = 1) in vec3 aColor;
+layout(location = 2) in float aSize;
+
+out vec3 vertexColor;
+
+void main() { 
+    gl_PointSize = aSize;
+    gl_Position = vec4(aPos, 0.0, 1.0);
+    vertexColor = aColor;
+}
+#version 300 es
+
+precision mediump float;
+
+in vec3 vertexColor;
+out vec4 FragColor;
+
+void main() {
+    FragColor = vec4(vertexColor, 1.0);
+}
