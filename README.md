@@ -1,2 +1,2 @@
 # thezida-web
-This is mine web page. 
+This is my web page. 
