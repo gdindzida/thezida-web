@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PDF Merger</title>
+<style>
+  body { font-family: sans-serif; max-width: 600px; margin: 20px auto; }
+  ul { list-style: none; padding: 0; }
+  li { display: flex; align-items: center; justify-content: space-between; margin: 5px 0; padding: 5px 10px; background: #f0f0f0; border-radius: 5px; }
+  button { margin-left: 5px; }
+</style>
+</head>
+<body>
+
+<h1>PDF Merger</h1>
+
+<input id="addFiles" type="file" multiple accept=".pdf">
+<ul id="fileList"></ul>
+<button id="mergeBtn">Merge PDFs</button>
+
+<script type="module">
+import createQpdf from 'https://cdn.jsdelivr.net/npm/qpdf-wasm-esm-embedded@1.1.1/qpdf.mjs';
+
+let qpdf = null;
+qpdf = await createQpdf(); // initialize WASM
+
+const fileListEl = document.getElementById('fileList');
+let files = []; // array of File objects in order
+
+function renderList() {
+    fileListEl.innerHTML = '';
+    files.forEach((file, index) => {
+        const li = document.createElement('li');
+        li.textContent = file.name;
+
+        const btns = document.createElement('span');
+
+        const up = document.createElement('button');
+        up.textContent = '↑';
+        up.disabled = index === 0;
+        up.onclick = () => {
+            [files[index-1], files[index]] = [files[index], files[index-1]];
+            renderList();
+        };
+
+        const down = document.createElement('button');
+        down.textContent = '↓';
+        down.disabled = index === files.length - 1;
+        down.onclick = () => {
+            [files[index], files[index+1]] = [files[index+1], files[index]];
+            renderList();
+        };
+
+        const remove = document.createElement('button');
+        remove.textContent = '✖';
+        remove.onclick = () => {
+            files.splice(index, 1);
+            renderList();
+        };
+
+        btns.append(up, down, remove);
+        li.appendChild(btns);
+        fileListEl.appendChild(li);
+    });
+}
+
+// Add new files
+document.getElementById('addFiles').addEventListener('change', e => {
+    files.push(...Array.from(e.target.files));
+    renderList();
+    e.target.value = null; // reset input
+});
+
+// Merge files
+document.getElementById('mergeBtn').addEventListener('click', async () => {
+    if (files.length < 2) return alert("Select at least 2 PDFs");
+
+    // write files to WASM FS
+    for (let i = 0; i < files.length; i++) {
+        const data = new Uint8Array(await files[i].arrayBuffer());
+        qpdf.FS.writeFile(`/in${i}.pdf`, data);
+    }
+
+    const args = ["--empty", "--pages"];
+    for (let i = 0; i < files.length; i++) args.push(`/in${i}.pdf`, "1-z");
+    args.push("--", "/merged.pdf");
+
+    try {
+        await qpdf.callMain(args);
+        const out = qpdf.FS.readFile("/merged.pdf");
+        const blob = new Blob([out], { type: "application/pdf" });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'merged.pdf';
+        a.click();
+    } catch (err) {
+        console.error(err);
+        alert("Error merging PDFs");
+    }
+});
+</script>
+
+</body>
+</html>
+
