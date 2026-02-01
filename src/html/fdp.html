@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PDF Merger</title>
+</head>
+<body>
+<h1>Merge PDFs</h1>
+<input type="file" id="pdfFiles" multiple accept=".pdf">
+<button id="mergeBtn">Merge PDFs</button>
+
+<script type="module">
+import qpdf from 'https://cdn.jsdelivr.net/npm/@jspawn/qpdf-wasm@latest/dist/qpdf.min.js';
+
+const mergeBtn = document.getElementById('mergeBtn');
+const inputFiles = document.getElementById('pdfFiles');
+
+mergeBtn.addEventListener('click', async () => {
+    if (inputFiles.files.length < 2) {
+        alert("Select at least 2 PDFs!");
+        return;
+    }
+
+    // Write files into WASM FS
+    const filePaths = [];
+    for (let i = 0; i < inputFiles.files.length; i++) {
+        const file = inputFiles.files[i];
+        const data = new Uint8Array(await file.arrayBuffer());
+        const path = `/input${i}.pdf`;
+        qpdf.FS.writeFile(path, data);
+        filePaths.push(path);
+    }
+
+    const outPath = '/merged.pdf';
+    try {
+        await qpdf({
+            input: filePaths,
+            output: outPath,
+            options: ["--empty", "--pages", ...filePaths.flatMap(p => [p, "1-z"]), "--"]
+        });
+
+        // Read merged PDF from WASM FS
+        const mergedData = qpdf.FS.readFile(outPath);
+        const blob = new Blob([mergedData], { type: 'application/pdf' });
+
+        // Trigger download
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'merged.pdf';
+        link.click();
+    } catch (err) {
+        console.error(err);
+        alert("Error merging PDFs");
+    }
+});
+</script>
+</body>
+</html>
+
