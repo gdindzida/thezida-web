@@ -1,0 +1,158 @@
+theme = "cactus"
+
+[pagination]
+pagerSize = 8 # posts per archive page
+
+[taxonomies]
+tag = "tags"
+category = "categories"
+
+[markup]
+[markup.highlight]
+style = "vim"     # any Chroma style (hugo gen chromastyles)
+noClasses = false
+[markup.goldmark.renderer]
+unsafe = true # allow raw HTML in Markdown
+
+# Required for the client-side search index (/index.json)
+[outputs]
+home = ["HTML", "RSS", "JSON"]
+
+# Navigation menu
+[menus]
+[[menus.main]]
+name = "home"
+url = "/"
+weight = 1
+[[menus.main]]
+name = "about"
+url = "/about/"
+weight = 2
+[[menus.main]]
+name = "articles"
+url = "/posts/"
+weight = 3
+[[menus.main]]
+name = "projects"
+url = "https://github.com/you"
+weight = 4
+[[menus.main]]
+name = "search"
+url = "/search/"
+weight = 5
+
+[params]
+author = "Martin Džida"
+description = "Computer vision performance engineer."
+dateFormat = "2 Jan 2006"                             # Go time layout, e.g. "14 Nov 2016"
+direction = "ltr"                                     # "rtl" loads the Vazir font
+projectsUrl = "https://github.com/gdindzida"
+
+# Look & feel (compiled into the stylesheet via Dart Sass)
+colorscheme = "classic" # dark | light | classic | white
+pageWidth = 48          # page width in rem
+
+rss = true # show the RSS feed link
+
+# Logo / avatar in the header
+[params.logo]
+enabled = true
+width = 50
+height = 50
+url = "/images/logo.png"
+gravatar = false         # use your Gravatar instead of `url`
+grayout = true           # grayscale until hovered
+
+# Favicons
+[params.favicon]
+[params.favicon.desktop]
+url = "/images/favicon.ico"
+[params.favicon.android]
+url = "/images/favicon-192x192.png"
+[params.favicon.apple]
+url = "/images/apple-touch-icon.png"
+
+# Gravatar (used by logo/favicon when their `gravatar = true`)
+[params.gravatar]
+email = "name@email.com"
+hash = ""                # or an md5 hash instead of the email
+
+# Home page overview
+[params.tagsOverview]
+enabled = false # show a tag cloud on the home page
+[params.postsOverview]
+showAllPosts = false # true = paginate all posts; false = recent N
+postCount = 5        # N most-recent posts when showAllPosts = false
+sortUpdated = false  # sort by last-modified instead of date
+[params.archive]
+sortUpdated = false
+[params.post]
+showUpdated = false # show "Updated:" date on posts
+
+# Footer copyright years (blank endYear = current year)
+[params.copyright]
+startYear = 1996
+# endYear = 2025
+
+# 404 page
+[params.error404]
+enabled = true
+title = "404 Page Not Found"
+description = "The page you are looking for might have been removed."
+
+# Open Graph / social metadata
+[params.openGraph]
+fbAppId = ""
+fbAdmins = ""
+twitterId = ""
+
+# Math typesetting
+[params.mathjax]
+enabled = false
+
+# Comments — Disqus
+[params.disqus]
+enabled = false
+shortname = ""
+
+# Comments — utterances
+[params.utterances]
+enabled = false
+repo = "owner/repo"
+issueTerm = "pathname" # pathname | url | title | …
+label = "Comment"
+theme = "github-dark"
+
+# Analytics
+[params.googleAnalytics]
+enabled = false
+id = ""
+[params.baiduAnalytics]
+enabled = false
+id = ""
+[params.cloudflareAnalytics]
+enabled = false
+id = ""
+[params.umamiAnalytics]
+enabled = false
+id = ""
+host = "https://analytics.example.com"
+scriptName = "umami.js"
+
+# Load assets from a CDN instead of bundling them locally
+[params.cdn]
+enable = true
+fontAwesome = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+
+# Social links — repeat the block per account.
+# `icon` is a Font Awesome brand name (or "mail" / "rss"); `label` is optional.
+[[params.socialLinks]]
+icon = "github"
+link = "https://github.com/gdindzida"
+[[params.socialLinks]]
+icon = "mail"
+link = "gdindzida@gmail.com"
+[[params.socialLinks]]
+icon = "mastodon"
+label = "mastodon.social"
+link = "https://mastodon.social/@you"

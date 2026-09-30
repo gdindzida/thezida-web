@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+
+  
+  
+<meta property="og:type" content="article">
+<meta property="og:title" content="Search">
+<meta property="og:url" content="http://localhost:1313/search/">
+<meta property="og:site_name" content="My New Hugo Project">
+
+
+
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Search">
+
+
+
+  
+
+  <link rel="shortcut icon" href="/images/favicon.ico"><link rel="icon" type="image/png" sizes="192x192" href="/images/favicon-192x192.png"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+  <title>Search</title>
+
+  
+  
+  
+
+  
+  
+  
+    
+    <link rel="stylesheet" href="/scss/style.734df21ca39bc823a2cdbee8776106237973c2dc465d502d3e9b9c67e49d1c3e.css" integrity="sha256-c03yHKObyCOizb7od2EGI3lzwtxGXVAtPpucZ&#43;SdHD4=">
+  
+  
+  
+
+  
+  
+    
+  
+
+  
+</head>
+<body class="max-width mx-auto px3 ltr">
+  
+  <div class="content index py4 ">
+    
+      <header id="header">
+  <a class="u-url u-uid" href="/"><img id="logo" alt class="u-logo" src="/images/logo.png"><div id="title">
+      <h1 class="p-name">My New Hugo Project</h1>
+    </div>
+  </a>
+  <div id="nav">
+    <ul>
+      <li class="icon">
+        <a href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-2x"></i></a>
+      </li><li><a href="/">Home</a></li><li><a href="/about/">About</a></li><li><a href="/posts/">Writing</a></li><li><a href="https://github.com/you">Projects</a></li><li><a href="/search/">Search</a></li></ul>
+  </div>
+</header>
+
+    
+    <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="content" itemprop="articleBody">
+    <section id="search">
+  <form>
+    <input type="text" class="search-input" id="search-input" placeholder="Search...">
+  </form>
+  <div id="search-result"></div>
+  <p class="search-no-result">No results found.</p>
+</section>
+
+  </div>
+</article>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    1996-2026
+    Martin Džida
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul><li><a href="/">Home</a></li><li><a href="/about/">About</a></li><li><a href="/posts/">Writing</a></li><li><a href="https://github.com/you">Projects</a></li><li><a href="/search/">Search</a></li></ul>
+    </nav>
+  </div>
+</footer>
+
+  </div>
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'">
+
+  
+<script>window.cactusI18n = {copyTip: "\"Copy to clipboard!\"", copied: "\"Copied!\""};</script>
+
+
+  
+  <script src="/js/main.db8cc9f2518a7ce9c6349893b6ffaaa94f192097d21d731fb769ebf8ae828987.js"></script>
+
+
+
+
+  
+    
+    <script src="/js/search.5ed52cdd956021fd7194109b25dbc5cbe93a1085461b9f29b1284df94c19481c.js"></script>
+  
+  <script>
+  (function () {
+    var input = document.getElementById('search-input');
+    if (!input) return;
+    var result = document.getElementById('search-result');
+    var noResult = document.querySelector('.search-no-result');
+    var bound = false;
+    input.addEventListener('focus', function () {
+      if (bound) return;
+      bound = true;
+      searchFunc("\/index.json", 'search-input', 'search-result');
+    });
+    input.addEventListener('keydown', function (e) { if (e.which === 13) e.preventDefault(); });
+    if (result) {
+      var observer = new MutationObserver(function (list) {
+        if (list.length === 1) {
+          if (list[0].addedNodes.length) { if (noResult) noResult.style.display = 'none'; }
+          else if (list[0].removedNodes.length) { if (noResult) noResult.style.display = ''; }
+        }
+      });
+      observer.observe(result, { childList: true });
+    }
+  })();
+  </script>
+
+
+
+
+
+
+
+
+
+</body>
+</html>
