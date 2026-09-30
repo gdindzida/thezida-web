@@ -1,152 +1,131 @@
-(() => {
-    const input = document.getElementById("search-input");
-    const results = document.getElementById("search-results");
-    const status = document.getElementById("search-status");
+// A local search script, originally for hexo-generator-search
+// (https://github.com/PaicHyperionDev/hexo-generator-search), GNU LGPL.
+// Copyright (C) 2015 Joseph Pan, Shuhao Mao. Modified by Pieter Robberechts.
+// Ported to Hugo for hugo-theme-cactus: reads /index.json (JSON) instead of
+// search.xml, and uses fetch instead of jQuery $.ajax. The search engine
+// (matching/ranking/snippet/highlight) is unchanged.
 
-    if (!input || !results || !status) {
-        return;
+/*exported searchFunc*/
+window.searchFunc = function (path, searchId, contentId) {
+
+  function stripHtml(html) {
+    html = html.replace(/<style([\s\S]*?)<\/style>/gi, "");
+    html = html.replace(/<script([\s\S]*?)<\/script>/gi, "");
+    html = html.replace(/<figure([\s\S]*?)<\/figure>/gi, "");
+    html = html.replace(/<\/div>/ig, "\n");
+    html = html.replace(/<\/li>/ig, "\n");
+    html = html.replace(/<li>/ig, "  *  ");
+    html = html.replace(/<\/ul>/ig, "\n");
+    html = html.replace(/<\/p>/ig, "\n");
+    html = html.replace(/<br\s*[\/]?>/gi, "\n");
+    html = html.replace(/<[^>]+>/ig, "");
+    return html;
+  }
+
+  function getAllCombinations(keywords) {
+    var i, j, result = [];
+
+    for (i = 0; i < keywords.length; i++) {
+      for (j = i + 1; j < keywords.length + 1; j++) {
+        result.push(keywords.slice(i, j).join(" "));
+      }
     }
+    return result;
+  }
 
-    let posts = [];
+  fetch(path).then(function (response) {
+    return response.json();
+  }).then(function (datas) {
+    var $input = document.getElementById(searchId);
+    if (!$input) { return; }
+    var $resultContent = document.getElementById(contentId);
 
-    const escapeHTML = (value) => {
-        const div = document.createElement("div");
-        div.textContent = value;
-        return div.innerHTML;
-    };
-
-    const normalize = (value) =>
-        String(value || "")
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "");
-
-    const getSearchText = (post) =>
-        normalize(
-            [
-                post.title,
-                post.summary,
-                post.content,
-                ...(post.tags || []),
-                ...(post.categories || [])
-            ].join(" ")
-        );
-
-    const renderResults = (matches) => {
-        if (matches.length === 0) {
-            results.innerHTML = `
-        <p class="search-no-results">
-          No results found.
-        </p>
-      `;
-            return;
+    $input.addEventListener("input", function () {
+      var resultList = [];
+      var keywords = getAllCombinations(this.value.trim().toLowerCase().split(" "))
+        .sort(function (a, b) { return b.split(" ").length - a.split(" ").length; });
+      $resultContent.innerHTML = "";
+      if (this.value.trim().length <= 0) {
+        return;
+      }
+      // perform local searching
+      datas.forEach(function (data) {
+        var matches = 0;
+        if (!data.title || data.title.trim() === "") {
+          data.title = "Untitled";
         }
+        var dataTitle = data.title.trim().toLowerCase();
+        var dataTitleLowerCase = dataTitle.toLowerCase();
+        var dataContent = stripHtml(data.content.trim());
+        var dataContentLowerCase = dataContent.toLowerCase();
+        var dataUrl = data.url;
+        var indexTitle = -1;
+        var indexContent = -1;
+        var firstOccur = -1;
+        // only match artiles with not empty contents
+        if (dataContent !== "") {
+          keywords.forEach(function (keyword) {
+            indexTitle = dataTitleLowerCase.indexOf(keyword);
+            indexContent = dataContentLowerCase.indexOf(keyword);
 
-        results.innerHTML = matches
-            .map(
-                (post) => `
-          <article class="search-result">
-            <h2>
-              <a href="${escapeHTML(post.url)}">
-                ${escapeHTML(post.title)}
-              </a>
-            </h2>
-
-            <time datetime="${escapeHTML(post.date)}">
-              ${escapeHTML(post.date)}
-            </time>
-
-            ${post.summary
-                        ? `<p>${escapeHTML(post.summary)}</p>`
-                        : ""
-                    }
-          </article>
-        `
-            )
-            .join("");
-    };
-
-    const search = (query) => {
-        const normalizedQuery = normalize(query).trim();
-
-        if (!normalizedQuery) {
-            status.textContent = "";
-            results.innerHTML = "";
-            return;
+            if (indexTitle >= 0 || indexContent >= 0) {
+              matches += 1;
+              if (indexContent < 0) {
+                indexContent = 0;
+              }
+              if (firstOccur < 0) {
+                firstOccur = indexContent;
+              }
+            }
+          });
         }
+        // show search results
+        if (matches > 0) {
+          var searchResult = {};
+          searchResult.rank = matches;
+          searchResult.str = "<li><a href='" + dataUrl + "' class='search-result-title'>" + dataTitle + "</a>";
+          if (firstOccur >= 0) {
+            // cut out 100 characters
+            var start = firstOccur - 20;
+            var end = firstOccur + 80;
 
-        const terms = normalizedQuery.split(/\s+/);
-
-        const matches = posts
-            .map((post) => {
-                const text = getSearchText(post);
-
-                // Every search term must occur somewhere in the post.
-                const matchesAllTerms = terms.every((term) =>
-                    text.includes(term)
-                );
-
-                if (!matchesAllTerms) {
-                    return null;
-                }
-
-                // Simple relevance score.
-                let score = 0;
-
-                terms.forEach((term) => {
-                    if (normalize(post.title).includes(term)) {
-                        score += 10;
-                    }
-
-                    if (normalize(post.summary).includes(term)) {
-                        score += 5;
-                    }
-
-                    if (text.includes(term)) {
-                        score += 1;
-                    }
-                });
-
-                return {
-                    post,
-                    score
-                };
-            })
-            .filter(Boolean)
-            .sort((a, b) => b.score - a.score)
-            .map((item) => item.post);
-
-        status.textContent =
-            `${matches.length} result${matches.length === 1 ? "" : "s"}`;
-
-        renderResults(matches);
-    };
-
-    fetch(window.searchIndexURL)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
+            if (start < 0) {
+              start = 0;
             }
 
-            return response.json();
-        })
-        .then((data) => {
-            posts = Array.isArray(data) ? data : [];
+            if (start == 0) {
+              end = 100;
+            }
 
-            status.textContent =
-                posts.length > 0
-                    ? `Search ${posts.length} post${posts.length === 1 ? "" : "s"}`
-                    : "No posts available.";
+            if (end > dataContent.length) {
+              end = dataContent.length;
+            }
 
-            input.addEventListener("input", () => {
-                search(input.value);
+            var matchContent = dataContent.substring(start, end);
+
+            // highlight all keywords
+            var regS = new RegExp(keywords.join("|"), "gi");
+            matchContent = matchContent.replace(regS, function (keyword) {
+              return "<em class=\"search-keyword\">" + keyword + "</em>";
             });
 
-            input.focus();
-        })
-        .catch((error) => {
-            console.error("Unable to load search index:", error);
-
-            status.textContent = "Unable to load search index.";
+            searchResult.str += "<p class=\"search-result\">" + matchContent + "...</p>";
+          }
+          searchResult.str += "</li>";
+          resultList.push(searchResult);
+        }
+      });
+      if (resultList.length) {
+        resultList.sort(function (a, b) {
+          return b.rank - a.rank;
         });
-})();
+        var result = "<ul class=\"search-result-list\">";
+        for (var i = 0; i < resultList.length; i++) {
+          result += resultList[i].str;
+        }
+        result += "</ul>";
+        $resultContent.innerHTML = result;
+      }
+    });
+  });
+};
