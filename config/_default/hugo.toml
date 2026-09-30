@@ -34,18 +34,22 @@ url = "/posts/"
 weight = 3
 [[menus.main]]
 name = "projects"
-url = "https://github.com/you"
+url = "https://github.com/gdindzida"
 weight = 4
+[[menus.main]]
+name = "Tools"
+url = "/tools/"
+weight = 5
 [[menus.main]]
 name = "search"
 url = "/search/"
-weight = 5
+weight = 6
 
 [params]
 author = "Martin Džida"
-description = "Computer vision performance engineer."
-dateFormat = "2 Jan 2006"                             # Go time layout, e.g. "14 Nov 2016"
-direction = "ltr"                                     # "rtl" loads the Vazir font
+description = "Hi, I'm Martin, an engineer."
+dateFormat = "2 Jan 2006"                    # Go time layout, e.g. "14 Nov 2016"
+direction = "ltr"                            # "rtl" loads the Vazir font
 projectsUrl = "https://github.com/gdindzida"
 
 # Look & feel (compiled into the stylesheet via Dart Sass)
@@ -153,6 +157,6 @@ link = "https://github.com/gdindzida"
 icon = "mail"
 link = "gdindzida@gmail.com"
 [[params.socialLinks]]
-icon = "mastodon"
+icon = "linkedin"
 label = "mastodon.social"
-link = "https://mastodon.social/@you"
+link = "https://www.linkedin.com/in/martin-džida-689003111"

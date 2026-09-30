@@ -1,14 +1,14 @@
+var wasmAssetBase = new URL("../../assets/wasm/", document.currentScript.src).href;
 var Module = {
   locateFile: function (file) {
-    if (file.endsWith(".wasm")) return "./assets/wasm/" + file;
-    if (file.endsWith(".data")) return "./assets/wasm/" + file;
+    if (file.endsWith(".wasm") || file.endsWith(".data")) return wasmAssetBase + file;
     return file;
   },
 };
 Module.canvas = document.getElementById("canvas");
 
 var script = document.createElement("script");
-script.src = "./assets/wasm/app2.js";
+script.src = wasmAssetBase + "app2.js";
 script.async = true;
 document.body.appendChild(script);
 

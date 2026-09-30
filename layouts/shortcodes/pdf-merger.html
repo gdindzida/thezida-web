@@ -1,0 +1,115 @@
+<div class="pdf-merger">
+  <p>Select two or more PDF files, arrange them in the order you want, and merge them in your browser.</p>
+  <p>
+    <label for="pdf-merger-files">PDF files</label><br>
+    <input id="pdf-merger-files" type="file" multiple accept="application/pdf,.pdf">
+  </p>
+  <ol id="pdf-merger-list" aria-label="PDFs in merge order"></ol>
+  <button id="pdf-merger-submit" type="button">Merge PDFs</button>
+  <p id="pdf-merger-status" role="status" aria-live="polite"></p>
+  <a id="pdf-merger-download" hidden download="merged.pdf">Download merged PDF</a>
+</div>
+
+<style>
+.pdf-merger ol { padding-left: 1.5rem; }
+.pdf-merger li { margin: .5rem 0; }
+.pdf-merger li button { margin-left: .4rem; }
+.pdf-merger #pdf-merger-files { max-width: 100%; }
+.pdf-merger [hidden] { display: none; }
+</style>
+
+<script type="module">
+import createQpdf from 'https://cdn.jsdelivr.net/npm/qpdf-wasm-esm-embedded@1.1.1/qpdf.mjs';
+
+const fileInput = document.getElementById('pdf-merger-files');
+const fileList = document.getElementById('pdf-merger-list');
+const mergeButton = document.getElementById('pdf-merger-submit');
+const status = document.getElementById('pdf-merger-status');
+const download = document.getElementById('pdf-merger-download');
+let files = [];
+let qpdfPromise;
+
+function renderFiles() {
+  fileList.replaceChildren();
+  files.forEach((file, index) => {
+    const item = document.createElement('li');
+    item.append(document.createTextNode(file.name + ' '));
+
+    const moveUp = document.createElement('button');
+    moveUp.type = 'button';
+    moveUp.textContent = 'Move up';
+    moveUp.disabled = index === 0;
+    moveUp.setAttribute('aria-label', `Move ${file.name} up`);
+    moveUp.addEventListener('click', () => {
+      [files[index - 1], files[index]] = [files[index], files[index - 1]];
+      renderFiles();
+    });
+
+    const moveDown = document.createElement('button');
+    moveDown.type = 'button';
+    moveDown.textContent = 'Move down';
+    moveDown.disabled = index === files.length - 1;
+    moveDown.setAttribute('aria-label', `Move ${file.name} down`);
+    moveDown.addEventListener('click', () => {
+      [files[index], files[index + 1]] = [files[index + 1], files[index]];
+      renderFiles();
+    });
+
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.textContent = 'Remove';
+    remove.setAttribute('aria-label', `Remove ${file.name}`);
+    remove.addEventListener('click', () => {
+      files.splice(index, 1);
+      renderFiles();
+    });
+
+    item.append(moveUp, moveDown, remove);
+    fileList.append(item);
+  });
+}
+
+fileInput.addEventListener('change', (event) => {
+  files.push(...Array.from(event.target.files));
+  renderFiles();
+  status.textContent = `${files.length} PDF${files.length === 1 ? '' : 's'} selected.`;
+  download.hidden = true;
+  event.target.value = '';
+});
+
+mergeButton.addEventListener('click', async () => {
+  if (files.length < 2) {
+    status.textContent = 'Select at least two PDF files.';
+    return;
+  }
+
+  mergeButton.disabled = true;
+  download.hidden = true;
+  status.textContent = 'Loading PDF merger…';
+  try {
+    qpdfPromise ??= createQpdf();
+    const qpdf = await qpdfPromise;
+    status.textContent = 'Merging PDFs…';
+
+    for (let i = 0; i < files.length; i++) {
+      qpdf.FS.writeFile(`/in${i}.pdf`, new Uint8Array(await files[i].arrayBuffer()));
+    }
+
+    const args = ['--empty', '--pages'];
+    for (let i = 0; i < files.length; i++) args.push(`/in${i}.pdf`, '1-z');
+    args.push('--', '/merged.pdf');
+    await qpdf.callMain(args);
+
+    const output = qpdf.FS.readFile('/merged.pdf');
+    const url = URL.createObjectURL(new Blob([output], { type: 'application/pdf' }));
+    download.href = url;
+    download.hidden = false;
+    status.textContent = 'Your merged PDF is ready.';
+  } catch (error) {
+    console.error(error);
+    status.textContent = 'Could not merge these PDFs. Check that they are valid PDF files and try again.';
+  } finally {
+    mergeButton.disabled = false;
+  }
+});
+</script>

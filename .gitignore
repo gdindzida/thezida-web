@@ -1,1 +1,10 @@
 public/
+# Hugo generated files
+.hugo_build.lock
+/resources/_gen/
+
+# Local dependencies and temporary files
+/node_modules/
+*.log
+.DS_Store
+Thumbs.db

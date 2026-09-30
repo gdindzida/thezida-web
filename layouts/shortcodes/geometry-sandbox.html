@@ -1,45 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="./assets/icons/spear.jpg">
-    <title>Mr. Dzida</title>
-    <link rel="stylesheet" href="./src/css/style.css">
-</head>
-
-<body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div class="home-container">
-        <header class="home-header">
-            <img src="./assets/images/profile.png" alt="Profile Picture" class="profile-image" />
-            <p>Hi, I'm Martin Džida, a software developer working in the automotive industry.</p>
-        </header>
-
-        <section class="home-links">
-            <h2>Find me online:</h2>
-            <ul>
-                <li>
-                    <a href="https://www.linkedin.com/in/martin-džida-689003111" target="_blank"
-                        rel="noopener noreferrer">
-                        LinkedIn
-                    </a>
-                </li>
-                <li>
-                    <a href="https://github.com/gdindzida" target="_blank" rel="noopener noreferrer">
-                        GitHub
-                    </a>
-                </li>
-                <li>
-                    <a href="mailto:gdindzida@gmail.com">Email: gdindzida@gmail.com</a>
-                </li>
-            </ul>
-	    <a href="src/html/fdp.html">Go to PDF Merger</a>
-        </section>
-    </div>
+<div class="geometry-sandbox">
     <div class="canvas-container">
-        <h1 class="canvas-header">Geometry algorithm sandbox</h1>
 
         <canvas class="canvas-window" id="canvas" width="600" height="600"
             oncontextmenu="event.preventDefault()"></canvas>
@@ -155,9 +115,78 @@
 
         </div>
 
-        <script type="text/javascript" src="src/js/index.js"></script>
-
     </div>
-</body>
+</div>
+<script src="{{ "geometry-sandbox/src/js/index.js" | relURL }}"></script>
+<style>
+    .geometry-sandbox .canvas-container {
+        width: 100%;
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
 
-</html>
+    .geometry-sandbox .canvas-header {
+        margin: 0;
+    }
+
+    .geometry-sandbox #canvas {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        border: 1px solid currentColor;
+    }
+
+    .geometry-sandbox .canvas-output {
+        margin: 0;
+    }
+
+    .geometry-sandbox .button-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: .5rem;
+    }
+
+    .geometry-sandbox .canvas-button,
+    .geometry-sandbox .input-container button {
+        font: inherit;
+        color: inherit;
+        padding: .4rem .7rem;
+    }
+
+    .geometry-sandbox .input-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: .65rem;
+        width: min(100%, 24rem);
+        padding: 1rem;
+        border: 1px solid currentColor;
+    }
+
+    .geometry-sandbox .input-container input,
+    .geometry-sandbox .input-container select {
+        font: inherit;
+        max-width: 100%;
+    }
+
+    .geometry-sandbox .input-number-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .geometry-sandbox .input-number-container input {
+        width: 5rem;
+    }
+
+    .geometry-sandbox .instructions {
+        width: 100%;
+        text-align: left;
+    }
+
+    .geometry-sandbox .instructions p {
+        margin: .7rem 0;
+    }
+</style>

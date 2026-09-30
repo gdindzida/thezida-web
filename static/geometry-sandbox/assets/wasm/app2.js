@@ -1085,7 +1085,7 @@ var ASM_CONSTS = {
 };
 function get_canvas_width() { return document.getElementById('canvas').width; }
 function get_canvas_height() { return document.getElementById('canvas').height; }
-function setup_resize_handler() { function isMobile() { const ua = navigator.userAgent; return ua.includes("Mobi") || ua.includes("Android"); } function resizeCanvas() { var dpi = window.devicePixelRatio || 1; var canvas = document.getElementById('canvas'); var targetWidth = window.innerWidth; if (!isMobile()) { targetWidth = window.innerWidth / 3; } targetHeight = targetWidth; canvas.style.width = targetWidth + "px"; canvas.style.height = targetHeight + "px"; canvas.width = targetWidth * dpi; canvas.height = targetHeight * dpi; _on_resize(canvas.width, canvas.height); } window.addEventListener('resize', resizeCanvas); resizeCanvas(); }
+function setup_resize_handler() { function isMobile() { const ua = navigator.userAgent; return ua.includes("Mobi") || ua.includes("Android"); } function resizeCanvas() { var dpi = window.devicePixelRatio || 1; var canvas = document.getElementById('canvas'); var targetWidth = window.innerWidth; targetWidth = Math.min(window.innerWidth * 0.8, canvas.parentElement.clientWidth); targetHeight = targetWidth; canvas.style.width = targetWidth + "px"; canvas.style.height = targetHeight + "px"; canvas.width = targetWidth * dpi; canvas.height = targetHeight * dpi; _on_resize(canvas.width, canvas.height); } window.addEventListener('resize', resizeCanvas); resizeCanvas(); }
 function ImGui_ImplSDL2_EmscriptenOpenURL(url) { url = url ? UTF8ToString(url) : null; if (url) window.open(url, '_blank'); }
 
 // end include: preamble.js
