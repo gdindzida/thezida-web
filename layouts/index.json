@@ -1,0 +1,16 @@
+{{- /* Client-side search index: regular content pages, excluding search itself. */ -}}
+{{- $index := slice -}}
+{{- range site.RegularPages -}}
+  {{- if ne .Layout "search" -}}
+    {{- $index = $index | append (dict
+      "title" (.Title | default "Untitled")
+      "url" .RelPermalink
+      "date" (.Date.Format "2006-01-02")
+      "summary" (.Summary | plainify)
+      "content" .Plain
+      "tags" (.Params.tags | default (slice))
+      "categories" (.Params.categories | default (slice))
+    ) -}}
+  {{- end -}}
+{{- end -}}
+{{- $index | jsonify -}}

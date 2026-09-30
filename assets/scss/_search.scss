@@ -1,0 +1,65 @@
+.search-page {
+    margin: 0 auto;
+}
+
+.search-header {
+    margin-bottom: 2rem;
+}
+
+.search-box {
+    margin-top: 1.5rem;
+}
+
+#search-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.75rem 1rem;
+    font: inherit;
+    border: 1px solid currentColor;
+    border-radius: 4px;
+    background: transparent;
+}
+
+#search-input:focus {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+.search-status {
+    margin-bottom: 1.5rem;
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+.search-result {
+    margin-bottom: 2rem;
+}
+
+.search-result h2 {
+    margin-bottom: 0.25rem;
+}
+
+.search-result time {
+    font-size: 0.85rem;
+    opacity: 0.6;
+}
+
+.search-result p {
+    margin-top: 0.5rem;
+}
+
+.search-no-results {
+    opacity: 0.7;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
