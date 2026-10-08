@@ -47,7 +47,7 @@ weight = 6
 
 [params]
 author = "Martin Džida"
-description = "Hi, I'm Martin, an engineer."
+description = "Hi! I'm Martin, an engineer."
 dateFormat = "2 Jan 2006"                    # Go time layout, e.g. "14 Nov 2016"
 direction = "ltr"                            # "rtl" loads the Vazir font
 projectsUrl = "https://github.com/gdindzida"
@@ -70,7 +70,7 @@ grayout = true           # grayscale until hovered
 # Favicons
 [params.favicon]
 [params.favicon.desktop]
-url = "/images/favicon.ico"
+url = "/images/logo.svg"
 [params.favicon.android]
 url = "/images/favicon-192x192.png"
 [params.favicon.apple]
