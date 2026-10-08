@@ -1,5 +1,5 @@
 +++
-date = '2026-09-29T18:18:27+02:00'
+date = '2026-10-08T19:22:27+02:00'
 draft = false
 title = '256 shades of gray'
 +++
