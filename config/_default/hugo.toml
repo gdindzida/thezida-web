@@ -63,7 +63,7 @@ rss = true # show the RSS feed link
 enabled = true
 width = 50
 height = 50
-url = "/images/logo.png"
+url = "/images/logo.svg"
 gravatar = false         # use your Gravatar instead of `url`
 grayout = true           # grayscale until hovered
 
